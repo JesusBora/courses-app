@@ -1,0 +1,26 @@
+* {
+    box-sizing: border-box;
+}
+
+.header {
+    border: 2px solid rgb(61, 57, 57);
+    display: flex;
+    align-items: center;
+    width: calc(100vw-30px);
+    justify-content: space-between;
+    padding: 10px;
+    margin-bottom: 15px;
+    height: 10vh;
+    font-weight: bold;
+    font-size: 2rem;
+}
+
+.header h1, .header div {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.header img {
+    width: 60px;
+}
