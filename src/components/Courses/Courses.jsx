@@ -10,6 +10,7 @@ import CreateCourse from '../CreateCourse/CreateCourse';
 const Courses = () => {
 	const mockedCoursesList = data.mockedCoursesList;
 	const [showCreateCourse, setShowCreateCourse] = useState(false);
+	const [searchQuery, setSearchQuery] = useState('');
 
 	const addNewCourse = (newCourse) => {
 		// Update the mockedCoursesList with the new course
@@ -18,11 +19,20 @@ const Courses = () => {
 		setShowCreateCourse(false);
 	};
 
+	const handleSearchChange = (e) => {
+		setSearchQuery(e.target.value);
+	};
+
 	return (
 		<div className='courses'>
 			<div className='search-create'>
 				<form action=''>
-					<Input text='Search' placeHolder='Search'></Input>
+					<Input
+						text='Search'
+						placeHolder='Search'
+						value={searchQuery}
+						onChange={handleSearchChange}
+					></Input>
 					<Button type='submit' text='Search'></Button>
 				</form>
 				<Button
@@ -35,9 +45,15 @@ const Courses = () => {
 			{showCreateCourse ? (
 				<CreateCourse onClose={addNewCourse} />
 			) : (
-				mockedCoursesList.map((course) => (
-					<CourseCard key={course.id} course={course}></CourseCard>
-				))
+				mockedCoursesList
+					.filter(
+						(course) =>
+							course.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+							course.id.toLowerCase().includes(searchQuery.toLowerCase())
+					)
+					.map((course) => (
+						<CourseCard key={course.id} course={course}></CourseCard>
+					))
 			)}
 		</div>
 	);

@@ -1,7 +1,12 @@
+// Import React and useState from React library
 import React, { useState } from 'react';
+
+// Import some data from a file called 'constants.json'
 import data from '../../constants.json';
 
+// Create a functional component called 'CreateCourse' that takes a prop called 'onClose'
 const CreateCourse = ({ onClose }) => {
+	// Define some state variables using useState
 	const [courseData, setCourseData] = useState({
 		title: '',
 		description: '',
@@ -13,24 +18,32 @@ const CreateCourse = ({ onClose }) => {
 
 	const [alertMessage, setAlertMessage] = useState('');
 
+	// Get a list of authors from the imported 'data' object
 	const mockedAuthorsList = data.mockedAuthorsList;
 
+	// Define some functions to handle changes and actions
+
+	// Function to handle changes in the 'title' input field
 	const handleTitleChange = (e) => {
 		setCourseData({ ...courseData, title: e.target.value });
 	};
 
+	// Function to handle changes in the 'description' textarea
 	const handleDescriptionChange = (e) => {
 		setCourseData({ ...courseData, description: e.target.value });
 	};
 
+	// Function to handle changes in the 'duration' input field
 	const handleDurationChange = (e) => {
 		setCourseData({ ...courseData, duration: e.target.value });
 	};
 
+	// Function to handle changes in the 'newAuthor' input field
 	const handleAuthorChange = (e) => {
 		setNewAuthor(e.target.value);
 	};
 
+	// Function to add an author to the 'authors' array in 'courseData'
 	const handleAddAuthor = (authorId) => {
 		const author = mockedAuthorsList.find((a) => a.id === authorId);
 		if (author) {
@@ -41,17 +54,19 @@ const CreateCourse = ({ onClose }) => {
 		}
 	};
 
+	// Function to delete an author from the 'authors' array in 'courseData'
 	const handleDeleteAuthor = (authorId) => {
 		const updatedAuthors = courseData.authors.filter((id) => id !== authorId);
 		setCourseData({ ...courseData, authors: updatedAuthors });
 	};
 
+	// Function to create a new author
 	const handleCreateAuthor = () => {
 		if (newAuthor.length >= 2) {
-			// Generate a unique author ID
+			// Generate a unique author ID by adding the current timestamp
 			const newAuthorId = `author-${Date.now()}`;
 			const newAuthorObj = { id: newAuthorId, name: newAuthor };
-			// Update mockedAuthorsList and set it back to data.mockedAuthorsList
+			// Update the mockedAuthorsList and set it back to data.mockedAuthorsList
 			data.mockedAuthorsList.push(newAuthorObj);
 			// Clear the input field
 			setNewAuthor('');
@@ -60,9 +75,10 @@ const CreateCourse = ({ onClose }) => {
 		}
 	};
 
+	// Function to create a new course
 	const handleCreateCourse = () => {
 		if (validateForm()) {
-			// Generate a unique course ID
+			// Generate a unique course ID by adding the current timestamp
 			const newCourseId = `course-${Date.now()}`;
 			const currentDate = new Date().toLocaleDateString('en-GB');
 			const newCourse = {
@@ -80,6 +96,7 @@ const CreateCourse = ({ onClose }) => {
 		}
 	};
 
+	// Function to validate the form fields
 	const validateForm = () => {
 		return (
 			courseData.title.length >= 2 &&
@@ -89,6 +106,7 @@ const CreateCourse = ({ onClose }) => {
 		);
 	};
 
+	// Render the component with HTML elements and dynamic data
 	return (
 		<div className='create-course'>
 			<h2>Create New Course</h2>
@@ -148,4 +166,5 @@ const CreateCourse = ({ onClose }) => {
 	);
 };
 
+// Export the 'CreateCourse' component as the default export
 export default CreateCourse;
