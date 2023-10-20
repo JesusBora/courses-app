@@ -1,17 +1,24 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import './CourseCard.css';
-import data from '../../../../constants.json';
 import Button from '../../../../common/Button/Button';
-import getCourseCuration from '../../../../helpers/getCourseDuration';
+import getCourseDuration from '../../../../helpers/getCourseDuration';
 
 const CourseCard = ({ course }) => {
-	const mockedAuthorsList = data.mockedAuthorsList;
+	const [authors, setAuthors] = useState([]); // Initialize authors as an empty array
+
+	useEffect(() => {
+		// Fetch authors from the API
+		fetch('http://localhost:4000/authors/all')
+			.then((response) => response.json())
+			.then((data) => setAuthors(data.result)) // Use data.result to access the array of authors
+			.catch((error) => console.error('Error fetching authors:', error));
+	}, []);
+
 	const getAuthorNames = (authorIds) => {
 		return authorIds
 			.map((authorId) => {
-				const author = mockedAuthorsList.find(
-					(author) => author.id === authorId
-				);
+				const author = authors.find((author) => author.id === authorId);
 				return author ? author.name : '';
 			})
 			.join(', ');
@@ -25,14 +32,18 @@ const CourseCard = ({ course }) => {
 			</div>
 			<div className='details'>
 				<p>
-					<strong>Autors: </strong>
-					{getAuthorNames(course.authors)}
+					<strong>Authors: </strong>
+					{authors.length > 0 ? getAuthorNames(course.authors) : 'No Authors'}
 				</p>
 				<p>
-					<strong>Duration </strong>
-					{getCourseCuration(course.duration)}
+					<strong>Duration: </strong>
+					{getCourseDuration(course.duration)}
 				</p>
-				<Button type='submit' text='Show course'></Button>
+				<Link to={`/courses/${course.id}`}>
+					{' '}
+					{/* Link to the specific course */}
+					<Button type='submit' text='Show course' />
+				</Link>
 			</div>
 		</div>
 	);

@@ -1,21 +1,34 @@
-// Courses.jsx
-import React, { useState } from 'react';
 import './Courses.css';
-import data from '../../constants.json';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import CourseCard from './components/CourseCard/CourseCard';
 import Button from '../../common/Button/Button';
 import Input from '../../common/Input/Input';
 import CreateCourse from '../CreateCourse/CreateCourse';
 
 const Courses = () => {
-	const mockedCoursesList = data.mockedCoursesList;
+	const [courses, setCourses] = useState([]); // Initialize courses as an empty array
 	const [showCreateCourse, setShowCreateCourse] = useState(false);
 	const [searchQuery, setSearchQuery] = useState('');
+	const navigate = useNavigate();
+
+	useEffect(() => {
+		// Check if the user is authenticated
+		const token = localStorage.getItem('token');
+		if (!token) {
+			// If user is no authenticated
+			navigate('/login');
+		} else {
+			// Fetch courses from the API
+			fetch('http://localhost:4000/courses/all')
+				.then((response) => response.json())
+				.then((data) => setCourses(data.result)) // Use data.result to access the array of courses
+				.catch((error) => console.error('Error fetching courses:', error));
+		}
+	}, [navigate]);
 
 	const addNewCourse = (newCourse) => {
-		// Update the mockedCoursesList with the new course
-		data.mockedCoursesList.push(newCourse);
-		// Close the CreateCourse component
+		setCourses([...courses, newCourse]);
 		setShowCreateCourse(false);
 	};
 
@@ -45,7 +58,7 @@ const Courses = () => {
 			{showCreateCourse ? (
 				<CreateCourse onClose={addNewCourse} />
 			) : (
-				mockedCoursesList
+				courses
 					.filter(
 						(course) =>
 							course.title.toLowerCase().includes(searchQuery.toLowerCase()) ||

@@ -4,7 +4,7 @@ const Input = (props) => {
 	return (
 		<input
 			type={props.type}
-			placeholder={props.placeHolder}
+			placeholder={props.placeholder}
 			name={props.name}
 			id={props.id}
 		/>
