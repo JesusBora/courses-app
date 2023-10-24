@@ -76,7 +76,6 @@ const CourseDetails = () => {
 			<p>Creation Date: {courseDetails.creationDate}</p>
 			<p>Duration: {courseDetails.duration}</p>
 			<p>Authors: {authorNames.join(', ')}</p>
-			{/* You can render other course details here */}
 		</div>
 	);
 };
